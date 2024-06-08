@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Products</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="index.js"></script>
+</body>
+</html>
+
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import './App.css';
+
+const mockProducts = [
+  { id: 1, productname: "Product 1", price: 100.0, rating: 4.5, discount: 10, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+1" },
+  { id: 2, productname: "Product 2", price: 200.0, rating: 4.7, discount: 15, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+2" },
+  { id: 3, productname: "Product 3", price: 150.0, rating: 4.3, discount: 5, availability: false, imageUrl: "https://via.placeholder.com/150?text=Product+3" },
+  { id: 4, productname: "Product 4", price: 300.0, rating: 4.8, discount: 20, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+4" },
+  { id: 5, productname: "Product 5", price: 250.0, rating: 4.6, discount: 25, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+5" }
+];
+
+const Product = ({ product }) => {
+  const { productname, price, rating, discount, availability, imageUrl } = product;
+
+  return (
+    <div className="product">
+      <img src={imageUrl} alt={productname} />
+      <h2>{productname}</h2>
+      <p>Price: ${price.toFixed(2)}</p>
+      <p>Rating: {rating}</p>
+      <p>Discount: {discount}%</p>
+      <p>{availability ? 'In Stock' : 'Out of Stock'}</p>
+    </div>
+  );
+}
+
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [limit, setLimit] = useState(3); // Number of top products to display
+
+  // Function to fetch top products based on rating
+  const fetchTopProducts = () => {
+    const sortedProducts = [...mockProducts].sort((a, b) => b.rating - a.rating);
+    setProducts(sortedProducts.slice(0, limit));
+  };
+
+  useEffect(() => {
+    fetchTopProducts();
+  }, [limit]);
+
+  return (
+    <div className="App">
+      <h1>Top Products</h1>
+      <label>
+        Number of products to display:
+        <input
+          type="number"
+          value={limit}
+          onChange={(e) => setLimit(Number(e.target.value))}
+          min="1"
+        />
+      </label>
+      <div className="product-list">
+        {products.map(product => (
+          <Product key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+/* src/App.css */
+
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+input {
+  margin-left: 10px;
+  padding: 5px;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  max-width: 300px;
+}
+
+.product img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin: 0;
+}
+
+p {
+  margin: 5px 0;
+}
+// src/App.jsx
+
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import Product from './components/Product';
+
+const mockProducts = [
+  { id: 1, productname: "Product 1", price: 100.0, rating: 4.5, discount: 10, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+1" },
+  { id: 2, productname: "Product 2", price: 200.0, rating: 4.7, discount: 15, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+2" },
+  { id: 3, productname: "Product 3", price: 150.0, rating: 4.3, discount: 5, availability: false, imageUrl: "https://via.placeholder.com/150?text=Product+3" },
+  { id: 4, productname: "Product 4", price: 300.0, rating: 4.8, discount: 20, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+4" },
+  { id: 5, productname: "Product 5", price: 250.0, rating: 4.6, discount: 25, availability: true, imageUrl: "https://via.placeholder.com/150?text=Product+5" }
+];
+
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [limit, setLimit] = useState(3); // Number of top products to display
+
+  // Function to fetch top products based on rating
+  const fetchTopProducts = () => {
+    const sortedProducts = [...mockProducts].sort((a, b) => b.rating - a.rating);
+    setProducts(sortedProducts.slice(0, limit));
+  };
+
+  // Use useEffect to fetch products on initial load and whenever limit changes
+  useEffect(() => {
+    fetchTopProducts();
+  }, [limit]);
+
+  return (
+    <div className="App">
+      <h1>Top Products</h1>
+      <label>
+        Number of products to display: 
+        <input 
+          type="number" 
+          value={limit} 
+          onChange={(e) => setLimit(Number(e.target.value))} 
+          min="1"
+        />
+      </label>
+      <div className="product-list">
+        {products.map(product => (
+          <Product key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+{
+	"scripts": {
+	  "start": "vite"
+	}
+  }
+  
