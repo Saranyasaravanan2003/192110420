@@ -1,0 +1,87 @@
+npx create-react-app top-products-app
+cd top-products-app
+import React, { useState, useEffect } from 'react';
+import './App.css';
+
+const mockProducts = [
+  { id: 1, productname: "Product 1", price: 100.0, rating: 4.5, discount: 10, availability: true },
+  { id: 2, productname: "Product 2", price: 200.0, rating: 4.7, discount: 15, availability: true },
+  { id: 3, productname: "Product 3", price: 150.0, rating: 4.3, discount: 5, availability: false },
+  { id: 4, productname: "Product 4", price: 300.0, rating: 4.8, discount: 20, availability: true },
+  { id: 5, productname: "Product 5", price: 250.0, rating: 4.6, discount: 25, availability: true }
+];
+
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [limit, setLimit] = useState(3);
+
+  useEffect(() => {
+    fetchTopProducts();
+  }, [limit]);
+
+  const fetchTopProducts = () => {
+    const sortedProducts = [...mockProducts].sort((a, b) => b.rating - a.rating);
+    setProducts(sortedProducts.slice(0, limit));
+  };
+
+  return (
+    <div className="App">
+      <h1>Top Products</h1>
+      <label>
+        Number of products to display: 
+        <input 
+          type="number" 
+          value={limit} 
+          onChange={(e) => setLimit(e.target.value)} 
+          min="1"
+        />
+      </label>
+      <ul>
+        {products.map(product => (
+          <li key={product.id}>
+            <h2>{product.productname}</h2>
+            <p>Price: ${product.price}</p>
+            <p>Rating: {product.rating}</p>
+            <p>Discount: {product.discount}%</p>
+            <p>Availability: {product.availability ? 'In stock' : 'Out of stock'}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+input {
+  margin-left: 10px;
+  padding: 5px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h2 {
+  margin: 0;
+}
+
+p {
+  margin: 5px 0;
+}
+npm start
